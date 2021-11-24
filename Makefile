@@ -1,26 +1,30 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
-LDFLAGS = -T boot/link.ld -melf_i386
-AS = nasm
-ASFLAGS = -f elf
-OBJ = ${C_SOURCES:.c=.o}
-CC = gcc
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
+# Sources
+C_SOURCES = $(shell find . -type f -name "*.c")
+ASM_SOURCES = $(shell find . -type f -name "*.asm")
+OBJECTS = $(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.o)
+
+# Executables
+ASSEMBLER = nasm
+COMPILER = gcc
+LINKER = ld
 STAGE2_ELTORITO = /usr/lib/grub/x86_64-pc/stage2_eltorito
 
-kernel.elf: loader.asm $(OBJ)
-	ld $(LDFLAGS) boot/loader.o $(OBJ) -o kernel.elf 
+# Flags
+LDFLAGS = -T boot/link.ld -melf_i386
+ASFLAGS = -f elf
+CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
 
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
+kernel.elf: $(OBJECTS)
+	$(LINKER) $(LDFLAGS) $(OBJECTS) -o kernel.elf 
 
-loader.asm:
-	$(AS) $(ASFLAGS) boot/loader.asm -o boot/loader.o
+%.o: %.c
+	$(COMPILER) $(CFLAGS) -c $< -o $@
+
+%.o: %.asm
+	$(ASSEMBLER) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf *.bin *.dis *.o os-image.bin *.elf *.iso
-	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o
-	rm -rf iso/
+	rm -rf **/*.o *.elf *.iso iso/
 
 iso: kernel.elf
 	mkdir -p iso/boot/grub
