@@ -2,5 +2,5 @@
 
 void kmain() {
     clear_screen();
-    kprint("Hello World\n");
+    kprintln("Hello World");
 }
