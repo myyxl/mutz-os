@@ -10,7 +10,7 @@ LINKER = ld
 STAGE2_ELTORITO = /usr/lib/grub/x86_64-pc/stage2_eltorito
 
 # Flags
-LDFLAGS = -T boot/link.ld -melf_i386
+LDFLAGS = -T link.ld -melf_i386
 ASFLAGS = -f elf
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
 
@@ -24,7 +24,7 @@ kernel.elf: $(OBJECTS)
 	$(ASSEMBLER) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf **/*.o *.elf *.iso iso/
+	rm -rf **/*.o src/**/*.o *.elf *.iso iso/
 
 iso: kernel.elf
 	mkdir -p iso/boot/grub
