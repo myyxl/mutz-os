@@ -7,12 +7,17 @@ OBJECTS = $(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.o)
 ASSEMBLER = nasm
 COMPILER = gcc
 LINKER = ld
-STAGE2_ELTORITO = /usr/lib/grub/x86_64-pc/stage2_eltorito
+STAGE2_ELTORITO = boot/stage2_eltorito
+EMU = qemu-system-x86_64
 
 # Flags
 LDFLAGS = -T link.ld -melf_i386
 ASFLAGS = -f elf
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
+EMU_FLAGS = -cdrom
+
+# Other
+OUTFILE = ./mutz-os.iso
 
 kernel.elf: $(OBJECTS)
 	$(LINKER) $(LDFLAGS) $(OBJECTS) -o kernel.elf 
@@ -31,4 +36,7 @@ iso: kernel.elf
 	cp $(STAGE2_ELTORITO) iso/boot/grub/
 	cp kernel.elf iso/boot/
 	cp boot/menu.lst iso/boot/grub/
-	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A MutzOS -boot-info-table -o ./mutz-os.iso iso
+	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A MutzOS -boot-info-table -o $(OUTFILE) iso
+
+run: iso
+	$(EMU) $(EMU_FLAGS) $(OUTFILE)
