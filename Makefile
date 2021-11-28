@@ -30,7 +30,9 @@ kernel.elf: $(OBJECTS)
 %.o: %.asm
 	$(ASSEMBLER) $(ASFLAGS) $< -o $@
 
+# TODO: Find better way to clean up..
 clean:
+	rm -rf src/kernel/**/*.o
 	rm -rf **/*.o src/**/*.o *.elf *.iso iso/
 
 iso: kernel.elf
