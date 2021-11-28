@@ -19,6 +19,8 @@ EMU_FLAGS = -cdrom
 # Other
 OUTFILE = ./mutz-os.iso
 
+default: iso
+
 kernel.elf: $(OBJECTS)
 	$(LINKER) $(LDFLAGS) $(OBJECTS) -o kernel.elf 
 
