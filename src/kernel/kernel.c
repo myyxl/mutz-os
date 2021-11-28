@@ -1,4 +1,4 @@
-#include "../drivers/screen.h"
+#include <screen.h>
 
 void kmain() {
     clear_screen();

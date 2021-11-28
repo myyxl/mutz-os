@@ -1,5 +1,5 @@
-#include "screen.h"
-#include "ports.h"
+#include <screen.h>
+#include <ports.h>
 
 int get_cursor_position();
 void set_cursor_position(int offset);

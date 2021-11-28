@@ -13,7 +13,7 @@ EMU = qemu-system-x86_64
 # Flags
 LDFLAGS = -T link.ld -melf_i386
 ASFLAGS = -f elf
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
+CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Isrc/include/
 EMU_FLAGS = -cdrom
 
 # Other
