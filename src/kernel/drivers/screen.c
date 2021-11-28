@@ -1,5 +1,6 @@
 #include <screen.h>
 #include <ports.h>
+#include <type.h>
 
 int get_cursor_position();
 void set_cursor_position(int offset);
@@ -37,7 +38,7 @@ void kprintln(char *message) {
 }
 
 int print_char(char c, int col, int row, char attr) {
-    unsigned char *vidmem = (unsigned char*) VIDEO_ADDRESS;
+    u8 *vidmem = (u8*) VIDEO_ADDRESS;
     if(!attr) attr = WHITE_ON_BLACK;
     
     if(col >= MAX_COLS) col = MAX_COLS - 1;
@@ -74,15 +75,15 @@ int get_cursor_position() {
 void set_cursor_position(int offset) {
     offset /= 2;
     port_byte_out(REG_SCREEN_CTRL, 14);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
+    port_byte_out(REG_SCREEN_DATA, (u8)(offset >> 8));
     port_byte_out(REG_SCREEN_CTRL, 15);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset & 0xff));
+    port_byte_out(REG_SCREEN_DATA, (u8)(offset & 0xff));
 }
 
 void clear_screen() {
     int screen_size = MAX_COLS * MAX_ROWS;
     int i;
-    char *vidmem = (unsigned char*) VIDEO_ADDRESS;
+    u8 *vidmem = (u8*) VIDEO_ADDRESS;
 
     for(i = 0; i < screen_size; i++) {
         vidmem[i*2] = ' ';
