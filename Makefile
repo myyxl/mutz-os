@@ -30,10 +30,9 @@ kernel.elf: $(OBJECTS)
 %.o: %.asm
 	$(ASSEMBLER) $(ASFLAGS) $< -o $@
 
-# TODO: Find better way to clean up..
 clean:
-	rm -rf src/kernel/**/*.o
-	rm -rf **/*.o src/**/*.o *.elf *.iso iso/
+	find . -iregex '.*\.\(o\|elf\|iso\)$$' -delete
+	rm -rf iso
 
 iso: kernel.elf
 	mkdir -p iso/boot/grub
