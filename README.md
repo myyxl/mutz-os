@@ -6,7 +6,7 @@ Run the following command to install the required dependencies:
 apt install genisoimage nasm qemu-system 
 ```
 ## Compiling
-To compile from source you can run `make iso`, this will generate an iso file.
+To compile from source you can run `make`, this will generate an iso file.
 
 To delete all generated output files run `make clean`.
 
